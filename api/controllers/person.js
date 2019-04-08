@@ -5,17 +5,9 @@ const Student = require('../models/Student.model')
 const Professor = require('../models/Professor.model')
 const Official = require('../models/Officials.model')
 const Person = require('../models/Person.model')
-const sercretKey = '!.@aAUJSasjd#@SDA'
+const sercretKey = global.gConfig.secretKey
 
 exports.add_official = (req, res, next) => {
-    var person = new Person()
-    person.id = req.body.id
-    person.username = req.body.username
-    person.password = req.body.password
-    person.firstname = req.body.firstname
-    person.lastname = req.body.lastname
-    person.email= req.body.email
-    person.position = req.body.position
     person.save().then(result => {
         console.log(result)
         res.status(201).json({
@@ -30,15 +22,6 @@ exports.add_official = (req, res, next) => {
 }
 
 exports.add_student = (req, res, next) => {
-    var person = new Person()
-    person.id = req.body.id
-    person.username = req.body.username
-    person.password = req.body.password
-    person.firstname = req.body.firstname
-    person.lastname = req.body.lastname
-    person.email= req.body.email
-    person.faculty = req.body.faculty
-    person.major = req.body.major
     person.save().then(result => {
         console.log(result)
         res.status(201).json({
@@ -53,13 +36,6 @@ exports.add_student = (req, res, next) => {
 }
 
 exports.add_professor = (req, res, next) => {
-    var person = new Person()
-    person.id = req.body.id
-    person.username = req.body.username
-    person.password = req.body.password
-    person.firstname = req.body.firstname
-    person.lastname = req.body.lastname
-    person.email= req.body.email
     person.save().then(result => {
         console.log(result)
         res.status(201).json({
@@ -74,13 +50,10 @@ exports.add_professor = (req, res, next) => {
 }
 
 exports.getPersonLogin = (req, res, next) => {
-    const authorzation = req.headers.authorization
-    const split = authorzation.split(' ')
-    const accessToken = split[1]
+    const accessToken = req.headers.authorization.split(" ")[1];
     if (accessToken) {
         jwt.verify(accessToken, sercretKey, (err, decodedToken) => {
             if (err) res.status(500).json(err)
-            console.log(decodedToken);
             res.status(200).json(decodedToken)
         })
     } else {
@@ -119,16 +92,6 @@ exports.login = (req, res, next) => {
 }
 
 exports.edit_person = (req, res, next) => {
-    var personUpdate = {}
-    if(req.body.id) personUpdate.id = req.body.id
-    if(req.body.username) personUpdate.username = req.body.username
-    if(req.body.password) personUpdate.password = req.body.password
-    if(req.body.firstname) personUpdate.firstname = req.body.firstname
-    if(req.body.lastname) personUpdate.lastname = req.body.lastname
-    if(req.body.email) personUpdate.email = req.body.email
-    if(req.body.faculty) personUpdate.faculty = req.body.faculty
-    if(req.body.major) personUpdate.major = req.body.major
-    if(req.body.position) personUpdate.position = req.body.position
     Person.findOneAndUpdate({id: req.body.id}, personUpdate, () => {
         res.status(200).json({
             message: "Person was edit",

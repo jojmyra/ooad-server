@@ -23,8 +23,10 @@ app.use(cors())
 
 // routes
 const personRoutes = require('./api/routes/person')
+const subjectRoutes = require('./api/routes/subject')
 
 app.use(`/api/person`, personRoutes)
+app.use(`/api/subject`, subjectRoutes)
 
 
 module.exports = app;
