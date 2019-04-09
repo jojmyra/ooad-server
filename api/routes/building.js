@@ -1,10 +1,10 @@
 const express = require('express')
 const router = express.Router()
 
-const BuldingController = require('../controllers/building')
+const BuildingController = require('../controllers/building')
 
-router.get(`/`, BuldingController.getAll)
-router.post(`/`, BuldingController.add)
-router.delete(`/:_id`, BuldingController.delete)
+router.get(`/`, BuildingController.getAll)
+router.post(`/`, BuildingController.add)
+router.delete(`/:_id`, BuildingController.delete)
 
 module.exports = router

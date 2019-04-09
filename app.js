@@ -26,11 +26,12 @@ const personRoutes = require('./api/routes/person')
 const subjectRoutes = require('./api/routes/subject')
 const roomRoutes = require('./api/routes/room')
 const buildingRoutes = require('./api/routes/building')
+const courseRoutes = require('./api/routes/course')
 
 app.use(`/api/person`, personRoutes)
 app.use(`/api/subject`, subjectRoutes)
+app.use(`/api/course`, courseRoutes)
 app.use(`/api/room`, roomRoutes)
 app.use(`/api/building`, buildingRoutes)
-
 
 module.exports = app;
