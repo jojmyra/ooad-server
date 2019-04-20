@@ -6,6 +6,7 @@ const Professor = require('../models/Professor.model')
 const Official = require('../models/Officials.model')
 const Person = require('../models/Person.model')
 const sercretKey = global.gConfig.secretKey
+const saltRounds = 10
 
 exports.add_official = (req, res, next) => {
     person.save().then(result => {
@@ -57,23 +58,22 @@ exports.getPersonLogin = (req, res, next) => {
             res.status(200).json(decodedToken)
         })
     } else {
-        res.status(401).json({auth: false, message: 'ไม่ใส่ token'})
+        res.status(401).json({ auth: false, message: 'ไม่ใส่ token' })
     }
 }
 
 exports.login = (req, res, next) => {
-    console.log(req.body);
-    if (req.body.email && req.body.password ) {
+    if (req.body.email && req.body.password) {
         Person.findOne({ username: req.body.email }).then((person) => {
             bcrypt.compare(req.body.password, person.password, (_err, password) => {
                 if (password) {
                     var personDetail = {
                         username: person.username,
-                        name: person.firstname+person.lastname,
-                        position: person.position
+                        name: person.firstname + person.lastname,
+                        status: person.status
                     }
                     var token = jwt.sign(personDetail, sercretKey)
-                    res.status(200).json({ auth: true, accessToken: token})
+                    res.status(200).json({ auth: true, accessToken: token })
                 } else {
                     res.status(401).json({
                         success: false,
@@ -92,7 +92,7 @@ exports.login = (req, res, next) => {
 }
 
 exports.edit_person = (req, res, next) => {
-    Person.findOneAndUpdate({id: req.body.id}, personUpdate, () => {
+    Person.findOneAndUpdate({ id: req.body.id }, personUpdate, () => {
         res.status(200).json({
             message: "Person was edit",
             success: true
@@ -101,10 +101,40 @@ exports.edit_person = (req, res, next) => {
 }
 
 exports.delete_person = (req, res, next) => {
-    Person.findOneAndDelete({id: req.body.id}, () => {
+    Person.findOneAndDelete({ id: req.body.id }, () => {
         res.status(200).json({
             message: "Person was delete",
             success: true
         })
     })
+}
+
+exports.getAll = (req, res, next) => {
+    Person.find().then((result) => {
+        res.status(200).json({
+            items: result,
+            totalItems: result.length
+        })
+    }).catch(() => {
+        res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
+    });
+}
+
+exports.add = (req, res, next) => {
+    bcrypt.hash(req.body.password, saltRounds, function (_err, hash) {
+        req.body.password = hash
+        Person.create(req.body).then(() => {
+            res.status(200).json({ message: "เพิ่มข้อมูลสำเร็จ" })
+        }).catch(() => {
+            res.status(400).json({ message: "เพิ่มข้อมูลไม่สำเร็จ" })
+        });
+    })
+}
+
+exports.delete = (req, res, next) => {
+    Person.findByIdAndRemove(req.params._id).then(() => {
+        res.status(200).json({message: "ลบข้อมูลสำเร็จ"})
+    }).catch(() => {
+        res.status(400).json({message: "ไม่สามารถลบข้อมูลได้, กรุณาลองใหม่อีกครั้ง"})
+    });
 }

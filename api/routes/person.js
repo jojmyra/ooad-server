@@ -13,4 +13,8 @@ router.get(`/loginData`, PersonController.getPersonLogin)
 router.put(`/editPerson`, PersonController.edit_person)
 router.delete(`/deletePerson`, PersonController.delete_person)
 
+router.get(`/`, PersonController.getAll)
+router.post(`/`, PersonController.add)
+router.delete(`/:_id`, PersonController.delete)
+
 module.exports = router
