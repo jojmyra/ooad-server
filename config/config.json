@@ -2,7 +2,7 @@
     "development": {
         "config_id": "development",
         "node_port": 3000,
-        "database": "mongodb://admin:admin123456@ds017193.mlab.com:17193/managementexam",
+        "database": "mongodb+srv://admin:admin123456@ooad-examination-9uxge.mongodb.net/test?retryWrites=true",
         "secretKey": "!.@aAUJSasjd#@SDA"
     },
     "testing": {
