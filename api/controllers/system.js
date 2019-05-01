@@ -1,8 +1,8 @@
 const System = require('../models/System.model')
 
 exports.updateSystem = (req, res, next) => {
-    System.findOneAndUpdate({pk: 'flag'}, req.body , { upsert: true}).then(() => {
-        res.status(200).json({message: "แก้ไขข้อมูลในระบบสำเร็จ"})
+    System.findOneAndUpdate({pk: 'flag'}, req.body , { upsert: true}).then((result) => {
+        res.status(200).json({message: "แก้ไขข้อมูลในระบบสำเร็จ"},result)
     }).catch((err) => {
         console.log(err);
         res.status(400).json({message: 'เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง'})
