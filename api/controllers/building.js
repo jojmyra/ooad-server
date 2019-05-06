@@ -1,7 +1,7 @@
 const Building = require('../models/Building.model')
 
 exports.getAll = (req, res, next) => {``
-    Building.find().then((result) => {
+    Building.find().sort({buildingId: 1}).then((result) => {
         res.status(200).json({
             items: result,
             totalItems: result.length

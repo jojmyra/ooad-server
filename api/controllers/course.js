@@ -1,7 +1,7 @@
 const Course = require('../models/Course.model')
 
 exports.getAll = (req, res, next) => {
-    Course.find().then((result) => {
+    Course.find().sort({subjectId: 1}).then((result) => {
         res.status(200).json({
             items: result,
             totalItems: result.length

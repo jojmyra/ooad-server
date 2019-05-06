@@ -1,7 +1,7 @@
 const Subject = require('../models/Subject.model')
 
 exports.getAll = (req, res, next) => {
-    Subject.find().then((result) => {
+    Subject.find().sort({subjectId: 1}).then((result) => {
         res.status(200).json({
             items: result,
             totalItems: result.length
