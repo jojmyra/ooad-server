@@ -110,17 +110,28 @@ exports.delete_person = (req, res, next) => {
 }
 
 exports.getAll = (req, res, next) => {
-    Person.find().sort({status: 1}).then((result) => {
-        res.status(200).json({
-            items: result,
-            totalItems: result.length
+    var startPage = req.query.startPage
+    var limitPage = req.query.limitPage
+    var skip = limitPage * (startPage - 1)
+    Person.find().sort({status: 1})
+    .skip(skip)
+    .limit(parseInt(limitPage))
+    .then((result) => {
+        Person.count().then(count => {
+            res.status(200).json({
+                items: result,
+                totalItems: count
+            })
+        }).catch(() => {
+            res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
         })
+
     }).catch(() => {
         res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
     });
 }
 
-exports.add = (req, res, next) => {
+exports.add = (req, res, next) => {    
     bcrypt.hash(req.body.password, saltRounds, function (_err, hash) {
         req.body.password = hash
         Person.create(req.body).then(() => {
