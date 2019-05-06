@@ -4,6 +4,16 @@ var mongoose = require('mongoose')
 var buildingSchema = mongoose.Schema({
 
   buildingId: { type: String, require: true, unique: true },
+  buildingName: { type: String, require: true }
+}, {
+  collection: 'building'
+})
+
+var Building = mongoose.model('Building', buildingSchema)
+module.exports = Building
+
+/*
+  buildingId: { type: String, require: true, unique: true },
   buildingName: { type: String, require: true },
   buildingFloor: { type: String, require: true },
   room: [ {
@@ -16,9 +26,4 @@ var buildingSchema = mongoose.Schema({
     }],
     roomSeatAvialable: { type: Number, require: true }
   }]
-}, {
-  collection: 'building'
-})
-
-var Building = mongoose.model('Building', buildingSchema)
-module.exports = Building
+*/
