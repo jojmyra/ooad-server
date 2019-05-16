@@ -17,6 +17,7 @@ exports.getAllSubjects = (req, res, next) => {
             _id: "$subjectId",
             id: { $push: "$_id" },
             course: { $push: "$courseGroup" },
+            student: { $push: "$student"},
             totalStudent: { $push: "$totalStudent" }
         }
     }]).exec((err, result) => {

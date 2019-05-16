@@ -141,6 +141,24 @@ exports.getAll = (req, res, next) => {
     });
 }
 
+exports.getProfessor = (req, res, next) => {
+    Person.aggregate([
+        { $match: { status: "อาจารย์"}},
+        { $project: { fullName: { $concat: [ "$firstname", " ", "$lastname"]}}}
+    ]).exec((err, result) => {
+        if(err) res.status(204).json({message: "เกิดข้อผิดพลาด"})
+        res.status(200).json(result)
+    })
+    // Person.find({status: "อาจารย์"}).then((result) => {
+    //     res.status(200).json({
+    //         items: result,
+    //         totalItems: result.length   
+    //     })
+    // }).catch((err) => {
+    //     res.status(204).json({message: 'ไม่มีข้อมูลในระบบ'})
+    // });
+}
+
 exports.add = (req, res, next) => {    
     bcrypt.hash(req.body.password, saltRounds, function (_err, hash) {
         req.body.password = hash

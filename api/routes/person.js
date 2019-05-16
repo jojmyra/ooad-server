@@ -13,6 +13,7 @@ router.get(`/loginData`, PersonController.getPersonLogin)
 router.delete(`/deletePerson`, PersonController.delete_person)
 
 router.get(`/`, PersonController.getAll)
+router.get(`/professor`, PersonController.getProfessor)
 router.post(`/`, PersonController.add)
 router.put(`/`, PersonController.edit_person)
 router.delete(`/:_id`, PersonController.delete)

@@ -28,6 +28,7 @@ const roomRoutes = require('./api/routes/room')
 const buildingRoutes = require('./api/routes/building')
 const courseRoutes = require('./api/routes/course')
 const systemRoutes = require('./api/routes/system')
+const examRoutes = require('./api/routes/exam')
 
 app.use(`/api/person`, personRoutes)
 app.use(`/api/subject`, subjectRoutes)
@@ -35,5 +36,6 @@ app.use(`/api/course`, courseRoutes)
 app.use(`/api/room`, roomRoutes)
 app.use(`/api/building`, buildingRoutes)
 app.use(`/api/system`, systemRoutes)
+app.use(`/api/exam`, examRoutes)
 
 module.exports = app;
