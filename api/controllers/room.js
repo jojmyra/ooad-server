@@ -15,7 +15,11 @@ exports.getAllBuilding = (req, res, next) => {
     Room.aggregate([{
         $group: {
             _id: "$buildingId",
-            room: { $push: "$roomName" }
+            id: { $push : "$_id"},
+            room: { $push: "$roomName" },
+            roomSeat: {$push: "$roomSeat" },
+            roomSeatMax: { $push: "$roomSeatMax"},
+            roomSeatRow: { $push: "$roomSeatRow"}
         }
     }]).exec((err, result) => {
         if(err) res.status(204).json({message: "เกิดข้อผิดพลาด"})
@@ -43,7 +47,13 @@ exports.add = (req, res, next) => {
 }
 
 exports.edit = (req, res, next) => {
-
+    var id = req.body._id
+    delete req.body._id
+    Room.findByIdAndUpdate(id, req.body).then((result) => {
+        res.status(200).json({message: "แก้ไขข้อมูลสำเร็จ"})
+    }).catch((err) => {
+        res.status(400).json({message: "แก้ข้อมูลไม่สำเร็จ"})
+    });
 }
 
 exports.delete = (req, res, next) => {

@@ -24,7 +24,13 @@ exports.add = (req, res, next) => {
 }
 
 exports.edit = (req, res, next) => {
-
+    var id = req.body._id
+    delete req.body._id
+    Building.findByIdAndUpdate(id, req.body).then((result) => {
+        res.status(200).json({message: "แก้ไขข้อมูลสำเร็จ"})
+    }).catch((err) => {
+        res.status(400).json({message: "แก้ข้อมูลไม่สำเร็จ"})
+    });
 }
 
 exports.delete = (req, res, next) => {

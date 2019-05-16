@@ -28,10 +28,12 @@ exports.add = (req, res, next) => {
 }
 
 exports.edit = (req, res, next) => {
-    Subject.findOneAndUpdate(req.body).then((result) => {
-        res.status(200).json(result)
-    }).catch(() => {
-        res.status(204).json({message: 'ไม่มีวิชาในระบบ'})
+    var id = req.body._id
+    delete req.body._id
+    Subject.findByIdAndUpdate(id, req.body).then((result) => {
+        res.status(200).json({message: "แก้ไขข้อมูลสำเร็จ"})
+    }).catch((err) => {
+        res.status(400).json({message: "แก้ข้อมูลไม่สำเร็จ"})
     });
 }
 

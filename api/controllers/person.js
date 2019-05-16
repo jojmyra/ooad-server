@@ -92,12 +92,13 @@ exports.login = (req, res, next) => {
 }
 
 exports.edit_person = (req, res, next) => {
-    Person.findOneAndUpdate({ id: req.body.id }, personUpdate, () => {
-        res.status(200).json({
-            message: "Person was edit",
-            success: true
-        })
-    })
+    var id = req.body._id
+    delete req.body._id
+    Person.findByIdAndUpdate(id, req.body).then((result) => {
+        res.status(200).json({message: "แก้ไขข้อมูลสำเร็จ"})
+    }).catch((err) => {
+        res.status(400).json({message: "แก้ข้อมูลไม่สำเร็จ"})
+    });
 }
 
 exports.delete_person = (req, res, next) => {
@@ -110,24 +111,33 @@ exports.delete_person = (req, res, next) => {
 }
 
 exports.getAll = (req, res, next) => {
-    var startPage = req.query.startPage
-    var limitPage = req.query.limitPage
-    var skip = limitPage * (startPage - 1)
-    Person.find().sort({status: 1})
-    .skip(skip)
-    .limit(parseInt(limitPage))
-    .then((result) => {
-        Person.count().then(count => {
-            res.status(200).json({
-                items: result,
-                totalItems: count
-            })
-        }).catch(() => {
-            res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
-        })
+    // var startPage = req.query.startPage
+    // var limitPage = req.query.limitPage
+    // var skip = limitPage * (startPage - 1)
+    // Person.find().sort({status: 1})
+    // .skip(skip)
+    // .limit(parseInt(limitPage))
+    // .then((result) => {
+    //     Person.count().then(count => {
+    //         res.status(200).json({
+    //             items: result,
+    //             totalItems: count
+    //         })
+    //     }).catch(() => {
+    //         res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
+    //     })
 
+    // }).catch(() => {
+    //     res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
+    // });
+
+    Person.find().sort({status: 1, username: 1}).then((result) => {
+        res.status(200).json({
+            items: result,
+            totalItems: result.length
+        })
     }).catch(() => {
-        res.status(204).json({ message: 'ไม่มีข้อมูลในระบบ' })
+        res.status(204).json({message: 'ไม่มีข้อมูลในระบบ'})
     });
 }
 

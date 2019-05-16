@@ -15,6 +15,7 @@ exports.getAllSubjects = (req, res, next) => {
     Course.aggregate([{
         $group: {
             _id: "$subjectId",
+            id: { $push: "$_id" },
             course: { $push: "$courseGroup" },
             totalStudent: { $push: "$totalStudent" }
         }
@@ -46,7 +47,13 @@ exports.add = (req, res, next) => {
 }
 
 exports.edit = (req, res, next) => {
-
+    var id = req.body._id
+    delete req.body._id
+    Course.findByIdAndUpdate(id, req.body).then((result) => {
+        res.status(200).json({message: "แก้ไขข้อมูลสำเร็จ"})
+    }).catch((err) => {
+        res.status(400).json({message: "แก้ข้อมูลไม่สำเร็จ"})
+    });
 }
 
 exports.delete = (req, res, next) => {
