@@ -3,8 +3,8 @@ var mongoose = require('mongoose')
 
 // eslint-disable-next-line no-unused-vars
 var roomSchema = mongoose.Schema({
-  buildingId: { type: String, require: true },
-  roomName: { type: String, require: true },
+  buildingId: { type: String, require: true, unique: true },
+  roomName: { type: String, require: true, unique: true },
   roomType: { type: String, require: true },
   roomFloor: { type: Number, require: true },
   roomSeat: [[String]],
