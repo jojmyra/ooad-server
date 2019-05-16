@@ -181,17 +181,3 @@ exports.delete = (req, res, next) => {
         res.status(400).json({message: "ไม่สามารถลบข้อมูลได้, กรุณาลองใหม่อีกครั้ง"})
     });
 }
-
-exports.getExam = (req, res, next) => {
-    console.log(req.query);
-    
-    // var id = mongoose.Types.ObjectId(req.query);
-    console.log(mongoose.Types.ObjectId.isValid(req.query));
-    
-    // console.log(id);
-    // Person.findOne({observer:  {_id: _id}}).then((result) => {
-    //     res.status(200).json(result)
-    // }).catch((err) => {
-    //     res.status(204).json(err)
-    // });
-}

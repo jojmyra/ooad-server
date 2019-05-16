@@ -40,3 +40,11 @@ exports.delete = (req, res, next) => {
         res.status(400).json({message: "ไม่สามารถลบข้อมูลได้, กรุณาลองใหม่อีกครั้ง"})
     });
 }
+
+exports.getExamByObserver = (req, res, next) => {
+    Exam.find({observer: {$elemMatch: {_id: req.query}}}, {subjectId:1, subjectName:1,buildingId:1,roomName:1, examDate:1, timeStart:1, timeEnd: 1}).then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(204).json(err)
+    });
+}
