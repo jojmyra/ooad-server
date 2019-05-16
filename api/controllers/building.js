@@ -16,9 +16,9 @@ exports.get = (req, res, next) => {
 }
 
 exports.add = (req, res, next) => {
-    Building.create(req.body).then(() => {
+    Building.create(req.body).then((result) => {
         res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
-    }).catch(() => {
+    }).catch((err) => {
         res.status(400).json({message: "เพิ่มข้อมูลไม่สำเร็จ"})
     });
 }

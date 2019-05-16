@@ -4,7 +4,7 @@ var mongoose = require('mongoose')
 var buildingSchema = mongoose.Schema({
 
   buildingId: { type: String, require: true, unique: true },
-  buildingName: { type: String, require: true }
+  buildingName: { type: String, require: true, unique: true }
 }, {
   collection: 'building'
 })

@@ -2,8 +2,8 @@
 const mongoose = require('mongoose')
 
 const subjectSchema = mongoose.Schema({
-  subjectId: String,
-  subjectName: String
+  subjectId: { type: String, unique: true},
+  subjectName: { type: String, unique: true}
 }, {
   collection: 'subject'
 })

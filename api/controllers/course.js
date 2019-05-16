@@ -16,6 +16,7 @@ exports.getAllSubjects = (req, res, next) => {
         $group: {
             _id: "$subjectId",
             id: { $push: "$_id" },
+            subject: { $push: "$subjectName" },
             course: { $push: "$courseGroup" },
             student: { $push: "$student"},
             totalStudent: { $push: "$totalStudent" }

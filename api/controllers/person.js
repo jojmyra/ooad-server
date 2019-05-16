@@ -68,8 +68,9 @@ exports.login = (req, res, next) => {
             bcrypt.compare(req.body.password, person.password, (_err, password) => {
                 if (password) {
                     var personDetail = {
+                        _id: person._id,
                         username: person.username,
-                        name: person.firstname + person.lastname,
+                        name: person.firstname + " " + person.lastname,
                         status: person.status
                     }
                     var token = jwt.sign(personDetail, sercretKey)
@@ -144,19 +145,22 @@ exports.getAll = (req, res, next) => {
 exports.getProfessor = (req, res, next) => {
     Person.aggregate([
         { $match: { status: "อาจารย์"}},
-        { $project: { fullName: { $concat: [ "$firstname", " ", "$lastname"]}}}
+        { $project: { fullName: { $concat: [ "$firstname", " ", "$lastname"]},
+                        _id: "$_id"}}
     ]).exec((err, result) => {
         if(err) res.status(204).json({message: "เกิดข้อผิดพลาด"})
         res.status(200).json(result)
     })
-    // Person.find({status: "อาจารย์"}).then((result) => {
-    //     res.status(200).json({
-    //         items: result,
-    //         totalItems: result.length   
-    //     })
-    // }).catch((err) => {
-    //     res.status(204).json({message: 'ไม่มีข้อมูลในระบบ'})
-    // });
+}
+
+exports.getObserver = (req, res, next) => {
+    Person.aggregate([
+        { $project: { fullName: { $concat: [ "$firstname", " ", "$lastname", " - ", "$status"]},
+                        _id: "$_id"}}
+    ]).exec((err, result) => {
+        if(err) res.status(204).json({message: "เกิดข้อผิดพลาด"})
+        res.status(200).json(result)
+    })
 }
 
 exports.add = (req, res, next) => {    
@@ -176,4 +180,18 @@ exports.delete = (req, res, next) => {
     }).catch(() => {
         res.status(400).json({message: "ไม่สามารถลบข้อมูลได้, กรุณาลองใหม่อีกครั้ง"})
     });
+}
+
+exports.getExam = (req, res, next) => {
+    console.log(req.query);
+    
+    // var id = mongoose.Types.ObjectId(req.query);
+    console.log(mongoose.Types.ObjectId.isValid(req.query));
+    
+    // console.log(id);
+    // Person.findOne({observer:  {_id: _id}}).then((result) => {
+    //     res.status(200).json(result)
+    // }).catch((err) => {
+    //     res.status(204).json(err)
+    // });
 }
