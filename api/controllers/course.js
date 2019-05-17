@@ -11,6 +11,14 @@ exports.getAll = (req, res, next) => {
     });
 }
 
+exports.get = (req, res, next) => {
+    Course.findById(req.query._id).then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(400).json({message: 'ไม่สามารถเรียกดูข้อมูลได้ขณะนี้, กรุณาลองใหม่อีกครั้ง'})
+    });
+}
+
 exports.getAllSubjects = (req, res, next) => {
     Course.aggregate([{
         $group: {
@@ -25,11 +33,6 @@ exports.getAllSubjects = (req, res, next) => {
         if (err) res.status(204).json({message: "เกิดข้อผิดพลาด"})
         res.status(200).json(result)
     })
-    // Course.find({}, 'subjectId courseGroup totalStudent').then((result) => {
-    //     res.status(200).json(result)
-    // }).catch(() => {
-    //     res.status(204).json({message: 'ไม่มีวิชาในระบบ'})
-    // });
 }
 
 exports.getSubject = (req, res, next) => {
@@ -41,6 +44,7 @@ exports.getSubject = (req, res, next) => {
 }
 
 exports.add = (req, res, next) => {
+    console.log(req.body);
     Course.create(req.body).then(() => {
         res.status(200).json({ message: "เพิ่มข้อมูลสำเร็จ" })
     }).catch(() => {

@@ -12,7 +12,11 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.get = (req, res, next) => {
-    
+    Exam.findById(req.query._id).then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(400).json({message: 'ไม่สามารถเรียกดูข้อมูลได้ขณะนี้, กรุณาลองใหม่อีกครั้ง'})
+    });
 }
 
 exports.add = (req, res, next) => {
@@ -45,6 +49,14 @@ exports.getExamByObserver = (req, res, next) => {
     Exam.find({observer: {$elemMatch: {_id: req.query}}}, {subjectId:1, subjectName:1,buildingId:1,roomName:1, examDate:1, timeStart:1, timeEnd: 1}).then((result) => {
         res.status(200).json(result)
     }).catch((err) => {
-        res.status(204).json(err)
+        res.status(400).json(err)
+    });
+}
+
+exports.getExamBySeat = (req, res, next) => {
+    Exam.find({seat: {$elemMatch: {studentId: req.query.studentId}}}, {subjectId:1, subjectName:1,buildingId:1,roomName:1, examDate:1, timeStart:1, timeEnd: 1,"seat.$":1}).then((result) => {
+        res.status(200).json(result)
+    }).catch((err) => {
+        res.status(400).json(err)
     });
 }

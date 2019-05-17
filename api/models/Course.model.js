@@ -7,7 +7,10 @@ const courseSchema = mongoose.Schema({
   courseGroup: { type: String },
   courseSeat: String,
   totalStudent: Number,
-  student: [String],
+  student: [ {
+    studentId: String,
+    studentName: String
+  }],
   score: [Number],
   professor: [{ _id: { type: Schema.Types.ObjectId, ref: 'Person'}, fullName: String }],
   year: String,
