@@ -7,7 +7,9 @@
     },
     "testing": {
         "config_id": "testing",
-        "database": "my-app-db-test"
+        "node_port": 3000,
+        "database": "mongodb+srv://admin:admin123456@cluster0-yvpro.mongodb.net/test?retryWrites=true",
+        "secretKey": "!.@aAUJSasjd#@SDA"
     },
     "staging": {
         "config_id": "staging",
