@@ -7,17 +7,22 @@ const courseSchema = mongoose.Schema({
   courseGroup: { type: String },
   courseSeat: String,
   totalStudent: Number,
-  student: [ {
-    studentId: String,
-    studentName: String
-  }],
+  student: [{ type: String, unique: true, ref: 'Person' } ],
   score: [Number],
-  professor: [{ _id: { type: Schema.Types.ObjectId, ref: 'Person'}, fullName: String }],
+  professor: [ { type: Schema.Types.ObjectId, ref: 'Person', require: true }],
   year: String,
   term: String
 }, {
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true },
   collection: 'course'
 }).index({ subjectId: 1, courseGroup: 1}, {unique: true})
+
+courseSchema.virtual('person', {
+  ref: 'Person',
+  localField: 'student',
+  foreignField: 'username'
+})
 
 var Course = mongoose.model('Course', courseSchema)
 module.exports = Course

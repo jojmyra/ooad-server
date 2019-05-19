@@ -1,53 +1,19 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const Student = require('../models/Student.model')
-const Professor = require('../models/Professor.model')
-const Official = require('../models/Officials.model')
 const Person = require('../models/Person.model')
 const sercretKey = global.gConfig.secretKey
 const saltRounds = 10
 
-exports.add_official = (req, res, next) => {
-    person.save().then(result => {
-        console.log(result)
-        res.status(201).json({
-            message: "Added Officials",
-            data: person,
-            success: true
-        })
-    }).catch(err => {
-        console.log(err)
-        res.status(500).json(err)
-    })
-}
-
-exports.add_student = (req, res, next) => {
-    person.save().then(result => {
-        console.log(result)
-        res.status(201).json({
-            message: "Added Student",
-            data: person,
-            success: true
-        })
-    }).catch(err => {
-        console.log(err)
-        res.status(500).json(err)
-    })
-}
-
-exports.add_professor = (req, res, next) => {
-    person.save().then(result => {
-        console.log(result)
-        res.status(201).json({
-            message: "Added Professor",
-            data: person,
-            success: true
-        })
-    }).catch(err => {
-        console.log(err)
-        res.status(500).json(err)
-    })
+exports.add_list_student = (req, res, next) => {
+    const StudentList = req.body
+    StudentList.forEach(student => {
+        Person.create(student).then((result) => {
+            res.status(200)
+        }).catch((err) => {
+            res.status(400)
+        });
+    });
 }
 
 exports.getPersonLogin = (req, res, next) => {

@@ -20,7 +20,13 @@ const examSchema = mongoose.Schema({
     toObject: { virtuals: true },
     toJSON: { virtuals: true },
     collection: 'examination'
-  },)
+},)
+
+examSchema.virtual('student', {
+  ref: 'Person',
+  localField: 'seat.studentId',
+  foreignField: 'username'
+})
 
 var Exam = mongoose.model('Exam', examSchema)
 module.exports = Exam
