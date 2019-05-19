@@ -2,7 +2,7 @@ const Course = require('../models/Course.model')
 const Person = require('../models/Person.model')
 
 exports.getAll = (req, res, next) => {
-    Course.find().sort({
+    Course.find().populate('professor').sort({
         subjectId: 1
     }).then((result) => {
         res.status(200).json({

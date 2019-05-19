@@ -7,10 +7,9 @@ const examSchema = mongoose.Schema({
   courseGroup: { type: String },
   buildingId: { type: String },
   roomName: { type: String },
-  observer: [{ _id: { type: Schema.Types.ObjectId, ref: 'Person'}, fullName: String }],
+  observer: [{ type: Schema.Types.ObjectId, ref: 'Person'}],
   seat: [{
     roomSeat: { type: String },
-    studentName: { type: String },
     studentId: { type: String }
   }],
   examDate: String,

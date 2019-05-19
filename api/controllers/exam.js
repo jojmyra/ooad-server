@@ -14,12 +14,7 @@ exports.getAll = (req, res, next) => {
 }
 
 exports.get = (req, res, next) => {
-    // Exam.findById(req.query._id).then((result) => {
-    //     res.status(200).json(result)
-    // }).catch((err) => {
-    //     res.status(400).json({message: 'ไม่สามารถเรียกดูข้อมูลได้ขณะนี้, กรุณาลองใหม่อีกครั้ง'})
-    // });
-    Exam.findById(req.query._id).populate('student', 'firstname lastname').then((result) => {
+    Exam.findById(req.query._id).populate('observer', 'firstname lastname').populate('student', 'firstname lastname').then((result) => {
         res.status(200).json(result)
     }).catch((err) => {
         res.status(204).json({
