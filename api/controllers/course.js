@@ -79,26 +79,25 @@ exports.add = (req, res, next) => {
 }
 
 exports.addOneStudentToCourse = (req, res, next) => {
-    Person.findOne({username: req.body.studentId, status: "นิสิต"}).then(result => {
+    Person.findOne({username: req.body.studentId, status: "นิสิต"}).then(result => {        
         if (result) {
             Course.find({_id:req.body._id, student:req.body.studentId}, 'student').then((result) => {
                 if (!result) {
-                    console.log("can add");
-                } else {
-                    console.log("can't add");
+                    Course.findByIdAndUpdate(req.body._id, {
+                        $addToSet: { student: req.body.studentId }
+                    }).then((result) => {
+                        res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
+                    }).catch((err) => {
+                        res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+                    });
+                } else {                    
+                    res.status(200).json({message: "นิสิตอยู่ในรายวิชานี้แล้ว"})
                 }
-            }).catch((err) => {
-                
-            });
-            Course.findByIdAndUpdate(req.body._id, {
-                $addToSet: { student: req.body.studentId }
-            }).then((result) => {
-                res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
             }).catch((err) => {
                 res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
             });
         } else {
-            res.status(204).json({message: "รหัสนิสิตไม่ถูกต้อง"})
+            res.status(200).json({message: "รหัสนิสิตไม่ถูกต้อง"})
         }
     }).catch(err => {
         res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
@@ -106,17 +105,29 @@ exports.addOneStudentToCourse = (req, res, next) => {
 }
 
 exports.addOneProfessorToCourse = (req, res, next) => {
-    Course.findByIdAndUpdate(req.body._id, {
-        $addToSet: { professor: req.body.professorId }
-    }).then((result) => {
-        console.log(result);
-        
-        res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
-    }).catch((err) => {
-        console.log(err);
-        
+    Person.findById(req.body.professorId).then(result => {
+        if (result) { 
+            Course.find({_id:req.body._id, professor: { $in: req.body.professorId}}, 'professor').then((result) => {
+                if (!result) {
+                    Course.findByIdAndUpdate(req.body._id, {
+                        $addToSet: { professor: req.body.professorId }
+                    }).then((result) => {
+                        res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
+                    }).catch((err) => {
+                        res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+                    });
+                } else {                    
+                    res.status(200).json({message: "อาจารย์อยู่ในรายวิชานี้แล้ว"})
+                }
+            }).catch((err) => {
+                res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+            });
+        } else {
+            res.status(200).json({message: "รหัสอาจารย์ไม่ถูกต้อง"})
+        }
+    }).catch(err => {
         res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
-    });
+    })
 }
 
 exports.edit = (req, res, next) => {
