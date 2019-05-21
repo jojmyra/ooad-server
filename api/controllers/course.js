@@ -79,9 +79,9 @@ exports.add = (req, res, next) => {
 }
 
 exports.addOneStudentToCourse = (req, res, next) => {
-    Person.findOne({username: req.body.studentId, status: "นิสิต"}).then(result => {        
+    Person.findOne({username: req.body.studentId, status: "นิสิต"}).then(result => {
         if (result) {
-            Course.find({_id:req.body._id, student:req.body.studentId}, 'student').then((result) => {
+            Course.findOne({_id:req.body._id, student:req.body.studentId}, 'student').then((result) => {
                 if (!result) {
                     Course.findByIdAndUpdate(req.body._id, {
                         $addToSet: { student: req.body.studentId }
@@ -107,7 +107,7 @@ exports.addOneStudentToCourse = (req, res, next) => {
 exports.addOneProfessorToCourse = (req, res, next) => {
     Person.findById(req.body.professorId).then(result => {
         if (result) { 
-            Course.find({_id:req.body._id, professor: { $in: req.body.professorId}}, 'professor').then((result) => {
+            Course.findOne({_id:req.body._id, professor: { $in: req.body.professorId}}, 'professor').then((result) => {
                 if (!result) {
                     Course.findByIdAndUpdate(req.body._id, {
                         $addToSet: { professor: req.body.professorId }
