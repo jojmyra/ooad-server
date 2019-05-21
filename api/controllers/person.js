@@ -8,12 +8,16 @@ const saltRounds = 10
 exports.add_list_student = (req, res, next) => {
     const StudentList = req.body
     StudentList.forEach(student => {
-        Person.create(student).then((result) => {
-            res.status(200)
-        }).catch((err) => {
-            res.status(400)
-        });
+        bcrypt.hash(student.password, saltRounds, function (_err, hash) {
+            student.password = hash
+            Person.create(student).then(() => {
+                res.status(200)
+            }).catch(() => {
+                res.status(400)
+            });
+        })
     });
+
 }
 
 exports.getPersonLogin = (req, res, next) => {
