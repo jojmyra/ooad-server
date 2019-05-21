@@ -1,5 +1,6 @@
 const Course = require('../models/Course.model')
 const Person = require('../models/Person.model')
+const Exam = require('../models/Exam.model')
 
 exports.getAll = (req, res, next) => {
     Course.find().populate('professor').sort({
@@ -79,54 +80,93 @@ exports.add = (req, res, next) => {
 }
 
 exports.addOneStudentToCourse = (req, res, next) => {
-    Person.findOne({username: req.body.studentId, status: "นิสิต"}).then(result => {
+    Person.findOne({
+        username: req.body.studentId,
+        status: "นิสิต"
+    }).then(result => {
         if (result) {
-            Course.findOne({_id:req.body._id, student:req.body.studentId}, 'student').then((result) => {
+            Course.findOne({
+                _id: req.body._id,
+                student: req.body.studentId
+            }, 'student').then((result) => {
                 if (!result) {
                     Course.findByIdAndUpdate(req.body._id, {
-                        $addToSet: { student: req.body.studentId }
+                        $addToSet: {
+                            student: req.body.studentId
+                        }
                     }).then((result) => {
-                        res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
+                        res.status(200).json({
+                            message: "เพิ่มข้อมูลสำเร็จ"
+                        })
                     }).catch((err) => {
-                        res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+                        res.status(400).json({
+                            message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"
+                        })
                     });
-                } else {                    
-                    res.status(200).json({message: "นิสิตอยู่ในรายวิชานี้แล้ว"})
+                } else {
+                    res.status(200).json({
+                        message: "นิสิตอยู่ในรายวิชานี้แล้ว"
+                    })
                 }
             }).catch((err) => {
-                res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+                res.status(400).json({
+                    message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"
+                })
             });
         } else {
-            res.status(200).json({message: "รหัสนิสิตไม่ถูกต้อง"})
+            res.status(200).json({
+                message: "รหัสนิสิตไม่ถูกต้อง"
+            })
         }
     }).catch(err => {
-        res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+        res.status(400).json({
+            message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"
+        })
     })
 }
 
 exports.addOneProfessorToCourse = (req, res, next) => {
     Person.findById(req.body.professorId).then(result => {
-        if (result) { 
-            Course.findOne({_id:req.body._id, professor: { $in: req.body.professorId}}, 'professor').then((result) => {
+        if (result) {
+            Course.findOne({
+                _id: req.body._id,
+                professor: {
+                    $in: req.body.professorId
+                }
+            }, 'professor').then((result) => {
                 if (!result) {
                     Course.findByIdAndUpdate(req.body._id, {
-                        $addToSet: { professor: req.body.professorId }
+                        $addToSet: {
+                            professor: req.body.professorId
+                        }
                     }).then((result) => {
-                        res.status(200).json({message: "เพิ่มข้อมูลสำเร็จ"})
+                        res.status(200).json({
+                            message: "เพิ่มข้อมูลสำเร็จ"
+                        })
                     }).catch((err) => {
-                        res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+                        res.status(400).json({
+                            message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"
+                        })
                     });
-                } else {                    
-                    res.status(200).json({message: "อาจารย์อยู่ในรายวิชานี้แล้ว"})
+                } else {
+                    res.status(200).json({
+                        message: "อาจารย์อยู่ในรายวิชานี้แล้ว"
+                    })
                 }
             }).catch((err) => {
-                res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+                res.status(400).json({
+                    message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"
+                })
             });
         } else {
-            res.status(200).json({message: "รหัสอาจารย์ไม่ถูกต้อง"})
+            res.status(200).json({
+                message: "รหัสอาจารย์ไม่ถูกต้อง"
+            })
         }
     }).catch(err => {
-        res.status(400).json({message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"})
+        res.status(400).json({
+            message: "เกิดข้อผิดพลาดกรุณาลองใหม่อีกครั้ง"
+        })
     })
 }
 
@@ -145,13 +185,23 @@ exports.edit = (req, res, next) => {
 }
 
 exports.delete = (req, res, next) => {
-    Course.findByIdAndRemove(req.params._id).then(() => {
-        res.status(200).json({
-            message: "ลบข้อมูลสำเร็จ"
+    Course.findById(req.params._id).then((result) => {
+        Exam.find({
+            subjectId: result.subjectId,
+            courseGroup: result.courseGroup
+        }).remove().exec((err, response) => {
+            Course.findByIdAndRemove(req.params._id).then(() => {
+                res.status(200).json({
+                    message: "ลบข้อมูลสำเร็จ"
+                })
+            }).catch(() => {
+                res.status(400).json({
+                    message: "ไม่สามารถลบข้อมูลได้, กรุณาลองใหม่อีกครั้ง"
+                })
+            });
         })
-    }).catch(() => {
-        res.status(400).json({
-            message: "ไม่สามารถลบข้อมูลได้, กรุณาลองใหม่อีกครั้ง"
-        })
-    });
+    }).catch((err) => {
+
+    })
+
 }
