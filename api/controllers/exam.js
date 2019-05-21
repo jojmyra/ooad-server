@@ -64,11 +64,7 @@ exports.delete = (req, res, next) => {
 
 exports.getExamByObserver = (req, res, next) => {
     Exam.find({
-        observer: {
-            $elemMatch: {
-                _id: req.query._id
-            }
-        }
+        observer: { $in: req.query._id }
     }, {
         subjectId: 1,
         subjectName: 1,
