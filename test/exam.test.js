@@ -54,7 +54,7 @@ describe('สร้างการสอบ', () => {
     });
 });
 
-describe('อ่านข้อมูล Exam จาก Database',() => {
+describe('อ่านข้อมูล Exam จาก Database', () => {
     var examId;
     it('เรียกดูการสอบทั้งหมด', done => {
         const exam = new Exam({
@@ -118,7 +118,9 @@ describe('อ่านข้อมูล Exam จาก Database',() => {
 
     it('เรียกดูข้อมูลผู้คุมสอบ', done => {
         Exam.find({
-            observer: { $in: observerId }
+            observer: {
+                $in: observerId
+            }
         }, {
             subjectId: 1,
             subjectName: 1,
@@ -151,9 +153,14 @@ describe('ลบตึก', () => {
             observer: [observerId]
         })
         exam.save()
-        Exam.remove(exam)
-            .then(() => {
-                done()
+        Exam.find({
+                subjectId: "111111"
+            })
+            .then(result => {
+                Exam.findByIdAndDelete(result._id)
+                    .then(() => {
+                        done()
+                    })
             })
     })
 })
