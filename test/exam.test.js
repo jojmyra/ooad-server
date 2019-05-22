@@ -136,13 +136,13 @@ describe('อ่านข้อมูล Exam จาก Database',() => {
 describe('ลบตึก', () => {
     it('ลบตึกจาก_id', done => {
         const exam = new Exam({
-            subjectId: "88624159-59",
+            subjectId: "111111",
             buildingId: "IF",
             examDate: "4/31/2019",
             timeStart: "09:00",
             timeEnd: "12:00",
             courseGroup: "1",
-            subjectName: "Unix Tools and Programming",
+            subjectName: "Testing Software",
             roomName: "3C01",
             seat: [{
                 studentId: "59160548",
